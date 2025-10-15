@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>量詞遊戲 - Học lượng từ tiếng Trung</title>
+  <style>
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: linear-gradient(135deg, #f9f9f9, #dceefb);
+      text-align: center;
+      padding: 50px;
+    }
+    h1 {
+      color: #336699;
+    }
+    .word {
+      font-size: 2em;
+      margin: 20px;
+      font-weight: bold;
+    }
+    .options button {
+      background-color: #fff;
+      border: 2px solid #336699;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 1.2em;
+      margin: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .options button:hover {
+      background-color: #336699;
+      color: white;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 1.5em;
+      height: 40px;
+    }
+    .score {
+      margin-top: 10px;
+      font-size: 1.2em;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎯 Trò chơi học lượng từ tiếng Trung (量詞)</h1>
+  <div class="word" id="word"></div>
+  <div class="options" id="options"></div>
+  <div class="result" id="result"></div>
+  <div class="score" id="score"></div>
+
+  <script>
+    const data = [
+      { word: "書 (sách)", correct: "本", options: ["個", "本", "張", "杯"] },
+      { word: "貓 (mèo)", correct: "隻", options: ["條", "隻", "個", "位"] },
+      { word: "人 (người)", correct: "個", options: ["杯", "條", "個", "匹"] },
+      { word: "魚 (cá)", correct: "條", options: ["條", "張", "本", "頭"] },
+      { word: "老師 (thầy cô)", correct: "位", options: ["位", "個", "隻", "條"] },
+      { word: "狗 (chó)", correct: "隻", options: ["隻", "匹", "條", "張"] },
+      { word: "馬 (ngựa)", correct: "匹", options: ["頭", "條", "匹", "隻"] },
+      { word: "紙 (giấy)", correct: "張", options: ["本", "張", "條", "隻"] },
+      { word: "水 (nước)", correct: "杯", options: ["杯", "條", "瓶", "個"] },
+      { word: "花 (hoa)", correct: "朵", options: ["朵", "個", "張", "條"] }
+    ];
+
+    let current = 0;
+    let score = 0;
+
+    function showQuestion() {
+      const item = data[current];
+      document.getElementById("word").textContent = item.word;
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+      item.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.onclick = () => checkAnswer(opt);
+        optionsDiv.appendChild(btn);
+      });
+      document.getElementById("result").textContent = "";
+      document.getElementById("score").textContent = `Điểm: ${score}/${data.length}`;
+    }
+
+    function checkAnswer(selected) {
+      const item = data[current];
+      const resultDiv = document.getElementById("result");
+      if (selected === item.correct) {
+        resultDiv.textContent = "✅ Chính xác!";
+        resultDiv.style.color = "green";
+        score++;
+      } else {
+        resultDiv.textContent = `❌ Sai rồi! Đáp án đúng là「${item.correct}」`;
+        resultDiv.style.color = "red";
+      }
+      current++;
+      setTimeout(() => {
+        if (current < data.length) {
+          showQuestion();
+        } else {
+          document.getElementById("word").textContent = "🎉 Kết thúc trò chơi!";
+          document.getElementById("options").innerHTML = "";
+          document.getElementById("result").textContent = `Điểm cuối cùng: ${score}/${data.length}`;
+        }
+      }, 1000);
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
